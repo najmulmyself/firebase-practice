@@ -37,6 +37,19 @@ function App() {
       setUser(user)
     })
   }
+  const handleChange = (event) =>{
+    if(event.target.name === 'email'){
+      const isEmailValid = /\S+@\S+\.\S+/.test(event.target.name);
+      console.log(isEmailValid) // This is not showing valid output
+    }
+    if(event.target.name === 'password'){
+      const isPasswordValid = event.target.value.length > 6;
+      const isPassHasNumber = /\d{1}/.test(event.target.value);
+      console.log(isPassHasNumber)
+      // console.log(isPasswordValid)
+    }
+    // console.log(event.target.name + ':',event.target.value)
+  }
   return (
     <div className="App">
       {
@@ -48,6 +61,12 @@ function App() {
           <p>{user.email}</p>
         </div>
       }
+      <form action="">
+        <input type="username" name="email" id="" placeholder="Enter Your Email" onBlur={handleChange}/><br/>
+        <input type="password" name="password" id="" placeholder="Enter your password" onBlur={handleChange}/><br/>
+        <br/>
+        <input type="submit" value="Submit"/>
+      </form>
     </div>
   );
 }
