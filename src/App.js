@@ -9,6 +9,7 @@ firebase.initializeApp(firebaseConfig);
 function App() {
   const [user,setUser] = useState({
     isSignedIn: false,
+    password:'',
     displayName: '',
     email: ''
   })
@@ -38,15 +39,22 @@ function App() {
     })
   }
   const handleChange = (event) =>{
+    let isFormValid = true;
     if(event.target.name === 'email'){
-      const isEmailValid = /\S+@\S+\.\S+/.test(event.target.name);
-      console.log(isEmailValid) // This is not showing valid output
+      isFormValid = /\S+@\S+\.\S+/.test(event.target.value);
+      // console.log(isEmailValid) // This is not showing valid output
     }
     if(event.target.name === 'password'){
       const isPasswordValid = event.target.value.length > 6;
       const isPassHasNumber = /\d{1}/.test(event.target.value);
-      console.log(isPassHasNumber)
+      // console.log(isPassHasNumber)
+      isFormValid = isPasswordValid && isPassHasNumber;
       // console.log(isPasswordValid)
+    }
+    if(isFormValid){
+      const newInfo = {...user}
+      newInfo[event.target.name] = event.target.value;
+      setUser(newInfo);
     }
     // console.log(event.target.name + ':',event.target.value)
   }
@@ -61,6 +69,8 @@ function App() {
           <p>{user.email}</p>
         </div>
       }
+      <p>Email : {user.email} </p>
+      <p>PassWord : {user.password} </p>
       <form action="">
         <input type="username" name="email" id="" placeholder="Enter Your Email" onBlur={handleChange}/><br/>
         <input type="password" name="password" id="" placeholder="Enter your password" onBlur={handleChange}/><br/>
