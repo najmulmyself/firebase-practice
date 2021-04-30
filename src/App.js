@@ -69,7 +69,7 @@ function App() {
     
   }
   const handleSubmit = (event) => {
-    if(user.email && user.password){
+    if(newUser && user.email && user.password){
       firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
         .then((res) => {
           // Signed in
@@ -93,6 +93,20 @@ function App() {
         });
     }
     event.preventDefault();
+  }
+
+  if(!newUser){
+    firebase.auth().signInWithEmailAndPassword(user.email,user.password)
+  .then((res) => {
+    const newInfo = {...user}
+    newInfo.success = 'Account Logged In Successfully';
+    newInfo.error = '';
+    setUser(newInfo);
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+  });
   }
 
   return (
