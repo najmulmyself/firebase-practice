@@ -7,6 +7,9 @@ import { useState } from 'react';
 firebase.initializeApp(firebaseConfig);
 
 function App() {
+  const [newUser,setNewUser] = useState({
+    new : false,
+  })
   const [user,setUser] = useState({
     isSignedIn: false,
     password:'',
@@ -93,6 +96,12 @@ function App() {
     }
     event.preventDefault();
   }
+  const handleNewUser = () => {
+    // let newOne = true;
+    // newUser.new = newOne;
+    setNewUser(!newUser.new);
+
+  }
   return (
     <div className="App">
       {
@@ -107,7 +116,14 @@ function App() {
       {/* <p>Email : {user.email} </p>
       <p>PassWord : {user.password} </p> */}
       {/* We Did it for test purposes */}
+      <br/>
+      <input type="checkbox" name="" id="" onClick={handleNewUser}/>
+      <label htmlFor="">New User ? Sign Up</label>
       <form onSubmit={handleSubmit}>
+        {
+        newUser && <input type="text" name="name" placeholder="Enter Your Name" id=""/>
+        }
+        <br/>
         <input type="username" name="email" id="" placeholder="Enter Your Email" onBlur={handleChange} required/><br/>
         <input type="password" name="password" id="" placeholder="Enter your password" onBlur={handleChange} required/><br/>
         <input type="submit" value="Submit"/>
