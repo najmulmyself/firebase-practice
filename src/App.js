@@ -11,7 +11,9 @@ function App() {
     isSignedIn: false,
     password:'',
     displayName: '',
-    email: ''
+    email: '',
+    error: '',
+    success: ''
   })
   const handleSignIn = () =>{
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -53,10 +55,43 @@ function App() {
     }
     if(isFormValid){
       const newInfo = {...user}
-      newInfo[event.target.name] = event.target.value;
+      newInfo[event.target.name] = event.target.value; // this convention is not used before || newInfo[event.target.name] \WHAT IS THIS MEAN
+      // Resolvee newInfo[event.target.name]
+      //This is used to set the value?key in a object . | we dont know what will be the value (email,password) of user object |so that we use [] for dynamic the data
+      // if we knew data is either email or password the we would use newInfo.email or newInfo.password.
       setUser(newInfo);
     }
     // console.log(event.target.name + ':',event.target.value)
+    
+
+
+    
+  }
+  const handleSubmit = (event) => {
+    if(user.email && user.password){
+      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+        .then((res) => {
+          // Signed in
+          const newInfo = {...user}
+          newInfo.success = 'Account Created Successfully';
+          newInfo.error = '';
+          setUser(newInfo);
+          // var user = userCredential.user;
+          // ...
+        })
+        .catch((error) => {
+          const newInfo= {...user}
+          newInfo.error = error.message;
+          newInfo.success = '';
+          setUser(newInfo);
+
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorMessage , errorCode)
+          // ..
+        });
+    }
+    event.preventDefault();
   }
   return (
     <div className="App">
@@ -69,14 +104,16 @@ function App() {
           <p>{user.email}</p>
         </div>
       }
-      <p>Email : {user.email} </p>
-      <p>PassWord : {user.password} </p>
-      <form action="">
-        <input type="username" name="email" id="" placeholder="Enter Your Email" onBlur={handleChange}/><br/>
-        <input type="password" name="password" id="" placeholder="Enter your password" onBlur={handleChange}/><br/>
-        <br/>
+      {/* <p>Email : {user.email} </p>
+      <p>PassWord : {user.password} </p> */}
+      {/* We Did it for test purposes */}
+      <form onSubmit={handleSubmit}>
+        <input type="username" name="email" id="" placeholder="Enter Your Email" onBlur={handleChange} required/><br/>
+        <input type="password" name="password" id="" placeholder="Enter your password" onBlur={handleChange} required/><br/>
         <input type="submit" value="Submit"/>
       </form>
+      <p style={{color: 'green'}}>{user.success}</p>
+      <p style={{color: 'red'}}>{user.error}</p>
     </div>
   );
 }
